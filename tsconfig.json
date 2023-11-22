@@ -11,9 +11,7 @@
             "node",
             "@wdio/globals/types",
             "expect-webdriverio",
-            "@wdio/mocha-framework",
-            "@wdio/crossbrowsertesting-service",
-            "@wdio/browserstack-service"
+            "@wdio/mocha-framework"
         ],
         "skipLibCheck": true,
         "noEmit": true,

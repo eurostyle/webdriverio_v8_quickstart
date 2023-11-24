@@ -66,7 +66,12 @@ export const config: Options.Testrunner = {
   capabilities: [ {
     browserName: 'chrome',
     'goog:chromeOptions': {
-      args: ['--headless', '--disable-gpu', '--window-size=1920,1080']
+      args: ['--headless', '--disable-gpu', '--no-sandbox'],
+    }
+  }, {
+    browserName: 'firefox',
+    'moz:firefoxOptions': {
+      args: ['-headless'],
     }
   }],
   
@@ -140,7 +145,7 @@ export const config: Options.Testrunner = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ['spec',['allure', {
+  reporters: ['spec', 'dot', ['allure', {
     outputDir: 'allure-results',
     disableWebdriverStepsReporting: false,
     disableWebdriverScreenshotsReporting: false,
@@ -166,17 +171,9 @@ export const config: Options.Testrunner = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare: function () {
-    // clear artifacts
-    // const artifactPath = 'reports/allure-report/data/attachments';
-    // if (fs.existsSync(artifactPath)) {
-    //   fs.rmSync(artifactPath, { recursive: true });
-    // }
-    
-    // Add --clean option to overwrite the existing report
-    // const allureCommand = 'allure build --clean';
-    // childProcess.execSync(allureCommand, { stdio: 'inherit' });
-  },
+  // onPrepare: function () {
+  //
+  // },
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -214,8 +211,9 @@ export const config: Options.Testrunner = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  before: function (capabilities, specs) {
+  before: async function (capabilities, specs) {
     deleteOldReports();
+    await browser.maximizeWindow();
   },
   /**
    * Runs before a WebdriverIO command gets executed.

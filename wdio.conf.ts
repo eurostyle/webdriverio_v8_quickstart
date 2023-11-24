@@ -1,6 +1,7 @@
 import type { Options } from '@wdio/types'
 // @ts-ignore
 import * as allure from 'allure-commandline';
+import { deleteOldReports } from './utils/allure.cleanup.ts';
 
 export const config: Options.Testrunner = {
   //
@@ -76,7 +77,7 @@ export const config: Options.Testrunner = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: 'info',
+  logLevel: 'error',
   //
   // Set specific log levels per logger
   // loggers:
@@ -213,8 +214,9 @@ export const config: Options.Testrunner = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {
-  // },
+  before: function (capabilities, specs) {
+    deleteOldReports();
+  },
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {string} commandName hook command name

@@ -134,7 +134,7 @@ export const config: Options.Testrunner = {
   
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  // specFileRetries: 1,
+  specFileRetries: 1,
   //
   // Delay in seconds between the spec file retry attempts
   // specFileRetriesDelay: 0,
@@ -207,11 +207,8 @@ export const config: Options.Testrunner = {
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
-   * @param {Array.<Object>} capabilities list of capabilities details
-   * @param {Array.<String>} specs        List of spec file paths that are to be run
-   * @param {object}         browser      instance of created browser/device session
    */
-  before: async function (capabilities, specs) {
+  before: async function () {
     deleteOldReports();
     await browser.maximizeWindow();
   },
@@ -247,15 +244,14 @@ export const config: Options.Testrunner = {
   // },
   /**
    * Function to be executed after a test (in Mocha/Jasmine only)
-   * @param {object}  test             test object
-   * @param {object}  context          scope object the test was executed with
    * @param {Error}   result.error     error object in case the test fails, otherwise `undefined`
    * @param {*}       result.result    return object of test function
    * @param {number}  result.duration  duration of test
    * @param {boolean} result.passed    true if test has passed, otherwise false
    * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
+   * @param error
    */
-  afterTest: async function(test, context, { error, result, duration, passed, retries }) {
+  afterTest: async function( error: object) {
       if (error) {
         await browser.takeScreenshot();
       }

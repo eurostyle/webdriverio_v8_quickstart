@@ -3,6 +3,8 @@ import type { Options } from '@wdio/types'
 import * as allure from 'allure-commandline';
 import { deleteOldReports } from './utils/allure.cleanup.ts';
 
+const retryCount: number = Number(process.env.RETRY_COUNT);
+
 export const config: Options.Testrunner = {
   //
   // ====================
@@ -27,8 +29,8 @@ export const config: Options.Testrunner = {
   //
   // The specs are defined as an array of spec files (optionally using wildcards
   // that will be expanded). The test for each spec file will be run in a separate
-  // worker process. In order to have a group of spec files run in the same worker
-  // process simply enclose them in an array within the specs array.
+  // worker process. To have a group of spec files run in the same worker
+  //  process, enclose them in an array within the specs array.
   //
   // If you are calling `wdio` from an NPM script (see https://docs.npmjs.com/cli/run-script),
   // then the current working directory is where your `package.json` resides, so `wdio`
@@ -47,13 +49,13 @@ export const config: Options.Testrunner = {
   // ============
   // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
   // time. Depending on the number of capabilities, WebdriverIO launches several test
-  // sessions. Within your capabilities you can overwrite the spec and exclude options in
-  // order to group specific specs to a specific capability.
+  // sessions. Within your capabilities, you can overwrite the spec and exclude options
+  // to group-specific specs to a specific capability.
   //
   // First, you can define how many instances should be started at the same time. Let's
   // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
   // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
-  // files and you set maxInstances to 10, all spec files will get tested at the same time
+  // files, and you set maxInstances to 10, all spec files will get tested at the same time
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
@@ -66,14 +68,14 @@ export const config: Options.Testrunner = {
   capabilities: [ {
     browserName: 'chrome',
     'goog:chromeOptions': {
-      args: ['--headless', '--disable-gpu', '--no-sandbox'],
+      args: [ '--headless', '--disable-gpu', '--no-sandbox' ],
     }
   }, {
     browserName: 'firefox',
     'moz:firefoxOptions': {
-      args: ['-headless'],
+      args: [ '-headless' ],
     }
-  }],
+  } ],
   
   //
   // ===================
@@ -98,11 +100,12 @@ export const config: Options.Testrunner = {
   //     '@wdio/appium-service': 'info'
   // },
   //
-  // If you only want to run your tests until a specific amount of tests have failed use
+  // If you only want to run your tests until a specific amount of tests has failed use
   // bail (default is 0 - don't bail, run all tests).
   bail: 0,
   //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
+  // Set a base URL to shorten url command calls.
+  // If your `url` parameter starts
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
@@ -112,17 +115,20 @@ export const config: Options.Testrunner = {
   waitforTimeout: 10000,
   //
   // Default timeout in milliseconds for request
-  // if browser driver or grid doesn't send response
+  // if a browser driver or grid doesn't send a response
   connectionRetryTimeout: 120000,
   //
   // Default request retries count
   connectionRetryCount: 3,
   //
   // Test runner services
-  // Services take over a specific job you don't want to take care of. They enhance
-  // your test setup with almost no effort. Unlike plugins, they don't add new
-  // commands. Instead, they hook themselves up into the test process.
-  // services: [],
+  //  take over a specific job you don't want to take care of.
+  //  They enhance
+  // your test setup with almost no effort.
+  // Unlike plugins, they don't add new
+  // commands.
+  // Instead, they hook themselves up into the test process.
+  // Services: [],
   //
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -133,23 +139,23 @@ export const config: Options.Testrunner = {
   framework: 'mocha',
   
   //
-  // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 1,
+  // The number of times to retry the entire spec file when it fails as a whole
+  specFileRetries: retryCount,
   //
   // Delay in seconds between the spec file retry attempts
   // specFileRetriesDelay: 0,
   //
-  // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
+  // Whether retried spec files should be retried immediately or deferred to the end of the queue
   // specFileRetriesDeferred: false,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ['spec', 'dot', ['allure', {
+  reporters: [ 'spec', 'dot', [ 'allure', {
     outputDir: 'allure-results',
     disableWebdriverStepsReporting: false,
     disableWebdriverScreenshotsReporting: false,
-  }]],
+  } ] ],
   
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
@@ -162,7 +168,7 @@ export const config: Options.Testrunner = {
   // =====
   // Hooks
   // =====
-  // WebdriverIO provides several hooks you can use to interfere with the test process in order to enhance
+  // WebdriverIO provides several hooks you can use to interfere with the test process to enhance
   // it and to build services around it. You can either apply a single function or an array of
   // methods to it. If one of them returns with a promise, WebdriverIO will wait until that promise got
   // resolved to continue.
@@ -177,7 +183,7 @@ export const config: Options.Testrunner = {
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
-   * @param  {string} cid      capability id (e.g 0-0)
+   * @param  {string} cid      capability id (e.g., 0-0)
    * @param  {object} caps     object containing capabilities for session that will be spawn in the worker
    * @param  {object} specs    specs to be run in the worker process
    * @param  {object} args     object that will be merged with the main configuration once worker is initialized
@@ -187,7 +193,7 @@ export const config: Options.Testrunner = {
   // },
   /**
    * Gets executed just after a worker process has exited.
-   * @param  {string} cid      capability id (e.g 0-0)
+   * @param  {string} cid      capability id (e.g., 0-0)
    * @param  {number} exitCode 0 - success, 1 - fail
    * @param  {object} specs    specs to be run in the worker process
    * @param  {number} retries  number of retries used
@@ -195,18 +201,21 @@ export const config: Options.Testrunner = {
   // onWorkerEnd: function (cid, exitCode, specs, retries) {
   // },
   /**
-   * Gets executed just before initialising the webdriver session and test framework. It allows you
+   * Gets executed just before initializing the webdriver session and test framework.
+   * It allows you
    * to manipulate configurations depending on the capability or spec.
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that are to be run
-   * @param {string} cid worker id (e.g. 0-0)
+   * @param {string} cid worker id (e.g., 0-0)
    */
   // beforeSession: function (config, capabilities, specs, cid) {
   // },
   /**
-   * Gets executed before test execution begins. At this point you can access to all global
-   * variables like `browser`. It is the perfect place to define custom commands.
+   * Gets executed before test execution begins.
+   * At this point, you can access to all global
+   * variables like `browser`.
+   * It is the perfect place to define custom commands.
    */
   before: async function () {
     deleteOldReports();
@@ -231,33 +240,25 @@ export const config: Options.Testrunner = {
   // beforeTest: function (test, context) {
   // },
   /**
-   * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
+   * Hook that gets executed _before_ a hook within the suite starts (e.g., runs before calling
    * beforeEach in Mocha)
    */
   // beforeHook: function (test, context, hookName) {
   // },
   /**
-   * Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
+   * Hook that gets executed _after_ a hook within the suite starts (e.g., runs after calling
    * afterEach in Mocha)
    */
   // afterHook: function (test, context, { error, result, duration, passed, retries }, hookName) {
   // },
   /**
-   * Function to be executed after a test (in Mocha/Jasmine only)
-   * @param {Error}   result.error     error object in case the test fails, otherwise `undefined`
-   * @param {*}       result.result    return object of test function
-   * @param {number}  result.duration  duration of test
-   * @param {boolean} result.passed    true if test has passed, otherwise false
-   * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
-   * @param error
+   * @param error {Error} error object in case the test fails
    */
-  afterTest: async function( error: object) {
-      if (error) {
-        await browser.takeScreenshot();
-      }
+  afterTest: async function (error: object) {
+    if (error) {
+      await browser.takeScreenshot();
+    }
   },
-  
-  
   /**
    * Hook that gets executed after the suite has ended
    * @param {object} suite suite details

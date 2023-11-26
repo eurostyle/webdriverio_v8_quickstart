@@ -24,4 +24,5 @@ It can be used to test web applications in its current state. Docker config as w
  - RUN `docker run -it -p 8080:8080 wdio:v8`
 
 After running tests and generating report in Docker, on your machine open localhost with port 8080 to see the report. 
-Reports older than 10 minutes are deleted. This `utils/allure.cleanup.ts`
+Reports older than 10 minutes are deleted.
+You can update the behavior by modifying `utils/allure.cleanup.ts`, or `wdio.conf.ts`.

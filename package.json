@@ -13,7 +13,7 @@
     },
     "scripts": {
         "wdio": "wdio run wdio.conf.ts",
-        "open-report": "npx allure generate --clean allure-results && npx allure open"
+        "open-report": "npx allure generate --clean --single-file allure-results && npx allure serve --port 8080"
     },
     "dependencies": {
         "allure-commandline": "^2.24.1"

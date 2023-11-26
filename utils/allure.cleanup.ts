@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const reportsPath = 'allure-results';
+const reportsPath = process.env.ALLURE_RESULTS_PATH as string;
 
 /**
  * Deletes old reports from the specified reports directory.
+ *
+ * @param minutes The number of minutes to keep old reports before deleting.
  */
 export function deleteOldReports(minutes: number = 10): void {
   const currentTime: number = Date.now();
